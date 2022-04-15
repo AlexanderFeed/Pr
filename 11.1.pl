@@ -25,4 +25,4 @@ grand_da(X,Y) :- ded(X,Y), woman(X), man(Y).
 v(X,Y) :- woman(X), man(Y), ded(X,Y), write(X).
 grand_dats(X) :- v(_,X).
 grand_ma_and_son(X,Y) :- bab(X,Y), man(X); bab(X,Y), man(Y), !.
-
+proiz(X,Y) :- Z is X*Y, write(Z).
