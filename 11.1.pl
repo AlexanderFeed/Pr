@@ -16,15 +16,12 @@ bab(katya, luba). %Люба бабушка Кати
 bab(kolya, luba). % Любы бабушка Коли
 ded(katya, petya).%У  Кати дед Петя
 ded(kolya, petya).%У  Коли дед Петя
-%father(X,Y) :- parent(X,Y), man(X).
-vivod(X,Y) :- parent(X,Y), man(X), write(X), !.
-father(X) :- vivod(_,X).
-%wife(X,Y) :- family(X,Y), woman(X).
-w(X,Y) :- woman(X), family(X,Y), write(X), !.
-wife(X) :- w(_,X).
+father(X,Y) :- parent(X,Y), man(X).
+father(X) :- parent(Y,X), man(Y), write(Y), fail.
+wife(X,Y) :- family(X,Y), woman(X).
+wife(X) :- family(Y,X), woman(Y), write(Y), fail.
 grand_da(X,Y) :- ded(X,Y), woman(X), man(Y).
-v(X,Y) :- woman(X), man(Y), ded(X,Y), write(X).
-grand_dats(X) :- v(_,X).
+grand_dats(X) :- ded(Y,X), man(X), woman(Y), write(Y), fail.
 grand_ma_and_son(X,Y) :- bab(X,Y), man(X); bab(X,Y), man(Y), !.
 proiz(X,Y) :- Z is X*Y, write(Z).
 proiz_ch(0,Z) :- write(Z).
@@ -38,12 +35,13 @@ max(X,Y) :-
     A is Z mod 3, A =\= 0,
     proverka(Z,Y, X1); X1 is X div 10, max(X1,Y).
 %17
-max2(0,Y) :- write(Y), !.
+max2(0,0) :- !.
 max2(X,Y) :-
     X1 is X div 10,
     A is X mod 10,
-    (A> Y, A mod 3 =\= 0 -> K is A;K is Y),
-    max2(X1, K).
+    max2(X1, Y1),
+    (A mod 3 =\=0, Y1 < A -> Y is A; Y is Y1).
+max2(X):- max2(X,Y), write(Y).
 %19
 fib(1,1) :- !.
 fib(2,1) :- !.
