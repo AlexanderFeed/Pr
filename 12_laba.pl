@@ -1,3 +1,4 @@
+%11
 nod(G) :-!, G=\=1.
 nod(A,B,_) :-
     Anew is A mod B,
@@ -10,7 +11,6 @@ nod(A,B,_) :-
      ).
 nod(A,B) :- nod(A,B,0).
 %false - НОД = 1, иначе true
-%11down
 d(A,C,A,X) :- !, C is X.
 d(A,C,I,CX) :- 0 is I mod 2, nod(A,I),!,
     CX1 is CX+1, I1 is I+1, d(A,C,I1,CX1).
@@ -22,3 +22,83 @@ u(A,C,I) :- 0 is I mod 2, nod(A,I),!, I1 is I+1,
     u(A,C1,I1), C is C1+1.
 u(A,C,I) :- I1 is I+1, u(A,C,I1).
 u(A,W) :- u(A,W,1).
+%12 не сделано
+common(A, B, L):-
+    nod(A, B,G),
+    L is (A*B)/G.
+l(0,0):- !.
+l(A,B) :- A1 is A div 10, l(A1,B1), B is B1 +1.
+f(_,_,_,1):-!,fail.
+f(A,X,Div,I):- nod(A,I),not(0 is (I mod Div)),!,
+    X is I.
+f(A,X,Div,I):- I1 is I - 1, f(A,X,Div,I1).
+f(A,X):- common(A,X,_),
+    I is A -1,f(A,X1,X,I),
+    l(A,Y),X is X1 * Y.
+%13
+fun13(0,XX,_,XX):-!.
+fun13(N,X,L,XX):- N1 is N-1,l(N1,L1),L1 is L,!,
+    pow(10,L,Y),XX1 is (N+XX)*Y,fun13(N1,X,L1,XX1).
+fun13(N,X,L,XX):- N1 is N-1,L1 is L-1, pow(10,L1,Y),
+    XX1 is (N+XX)*Y,fun13(N1,X,L1,XX1).
+fun13(N,X,L,XX):- N1 is N-1,
+    XX1 is (N+XX),fun13(N1,X,L,XX1).
+fun13(N,X):-l(N,L), fun13(N,X,L,0).
+
+read_list(0,[]):-!.
+read_list(N,[H|T]):- read(H),
+    Nmin1 is N - 1,read_list(Nmin1,T).
+
+write_list([]):-!.
+write_list([H|T]):- write(H),write(' '), write_list([T]).
+
+list_min([],M,M):-!.
+list_min([H|T],X,M):-H<M,
+    list_min(T,X,H).
+list_min([_|T],X,M):- list_min(T,X,M).
+list_min([H|T],X):-list_min(T,X,H).
+
+list_max([],M,M):-!.
+list_max([H|T],X,M):-H>M,
+    list_max(T,X,H).
+list_max([_|T],X,M):- list_max(T,X,M).
+list_max([H|T],X):-list_max(T,X,H).
+
+concat1([],B,B):-!.
+concat1([H|T],B,[H|Tail]):- concat1(T,B,Tail).
+
+list_find([],_,0):-!.
+list_find([H|T],X,Q):- H is X,!,
+    list_find(T,X,Q1),Q is Q1 +1.
+list_find([_|T],X,Q):- list_find(T,X,Q).
+
+list_rev(ListX,ListY):-list_rev(ListX,[],ListY,ListY).
+list_rev([],ListY,ListY,[]).
+list_rev([X|TX],ListR,ListY,[_|Bound]):- list_rev(TX,[X|ListR],ListY,Bound).
+%14
+len([],0):-!.
+len([_|T],A):-len(T,A1),A is A1+1.
+%15
+fun15([H|_],[],M,Qm):- Qm is 1, H is M,!.
+fun15([H|T],[H|Tn],M,Qm):-H is M,!,
+    Qm1 is Qm -1,fun15(T,Tn,M,Qm1).
+fun15([H|T],[H|Tn],M,Qm):-fun15(T,Tn,M,Qm).
+fun15(List,NewList):-list_min(List,M),list_find(List,M,Qm),fun15(List,NewList,M,Qm).
+%16
+%17
+%18
+fun18([],M,M1,M,M1):-!.
+fun18([H|T],X1,X2,M,_):-H>M,
+    fun18(T,X1,X2,H,M).
+fun18([_|T],X1,X2,M,M2):- fun18(T,X1,X2,M,M2).
+fun18([H|T],X1,X2):-fun18(T,X1,X2,H,0).
+%19
+fun19([],0):-!.
+fun19([H|T],X):-0 is H mod 2,!,
+    fun19(T,X1),X is X1 + 1.
+fun19([_|T],X):- fun19(T,X).
+%20
+fun20([],_,_,[]):-!.
+fun20([H|T],A,B,[H|Tn]):- H>=A,H=<B,!,
+    fun20(T,A,B,Tn).
+fun20([_|T],A,B,X):- fun20(T,A,B,X).
