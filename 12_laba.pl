@@ -86,6 +86,13 @@ fun15([H|T],[H|Tn],M,Qm):-fun15(T,Tn,M,Qm).
 fun15(List,NewList):-list_min(List,M),list_find(List,M,Qm),fun15(List,NewList,M,Qm).
 %16
 %17
+fun17([],M1,M2) :-!, write(M1),nl, write(M2),!.
+fun17([H|T]) :- fun17(T,H).
+fun17([H|T],M1) :- fun17(T,M1,H).
+fun17([H|T],M1,M2) :- H >=M1, M22 is M1,
+    M11 is H, !,
+    fun17(T,M11,M22);
+    H>=M2, M22 is H,!, fun17(T,M1,M22).
 %18
 fun18([],M,M1,M,M1):-!.
 fun18([H|T],X1,X2,M,_):-H>M,
