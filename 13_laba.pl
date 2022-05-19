@@ -105,7 +105,38 @@ write('Fam sles is'), writeln(W1),
 write('Fam tok is'), writeln(W2),
 write('Fam svar is'), writeln(W3).
 %17 sosud, liq, mesto
-fun17 :- Kak = [_,_,_].
+%B справа от A в C
+right(_,_,[_]):-fail.
+right(A,B,[A|[B|_]]).
+right(A,B,[_|List]):-right(A,B,List).
+
+%B слева от A в C
+left(_,_,[_]):-fail.
+left(A,B,[B|[A|_]]).
+left(A,B,[_|List]):-left(A,B,List).
+
+%Около A в C
+next(A,B,List):-right(A,B,List).
+next(A,B,List):-left(A,B,List).
+
+fun17:- Drink=[_,_,_,_],
+in_list(Drink,[bottle,_]),
+in_list(Drink,[glass,_]),
+in_list(Drink,[kuvshin,_]),
+in_list(Drink,[jar,_]),
+in_list(Drink,[_,milk]),
+in_list(Drink,[_,lemonade]),
+in_list(Drink,[_,kvas]),
+in_list(Drink,[_,agua]),
+not(in_list(Drink,[bottle,milk])),
+not(in_list(Drink,[bottle,agua])),
+not(in_list(Drink,[jar,lemonade])),
+not(in_list(Drink,[jar,agua])),
+left([_,lemonade],[kuvshin,_],Drink),
+right([_,lemonade],[_,kvas],Drink),
+next([glass,_],[jar,_],Drink),
+next([glass,_],[_,milk],Drink),
+write(Drink),!.
 %18
 fun18 :- Ch = [_,_,_],
 in_list(Ch,[voronov,_]),
@@ -123,3 +154,19 @@ not(in_list(Ch,[pavlov,artist])),
 not(in_list(Ch,[saharov,writer])),
 not(in_list(Ch,[voronov,writer])),
 write(Ch),!.
+%19 name, race, place, sport
+fun19 :- Chto =(_,_,_),
+in_list(Chto,[mike,_,_,basket]),
+in_list(Chto,[rich,_,_,_]),
+in_list(Chto,[simon,israel,_,_]),
+in_list(Chto,[_,_,1,kriket]),
+in_list(Chto,[_,_,_,tenis]),
+in_list(Chto,[_,austral,_,_]),
+in_list(Chto,[_,amerika,_,_]),
+in_list(Chto,[_,_,2,_]),
+in_list(Chto,[_,_,3,_]),
+not(in_list(Chto,[simon,_,_,tenis])),
+not(in_list(Chto,[mike,amerika,_,_])),
+in_list(Chto,[W1,austral,_,_]),
+in_list(Chto,[rich,_,C1,_]),
+write('Austral is'), writeln(W1), write('Rich is'), writeln(C1).
