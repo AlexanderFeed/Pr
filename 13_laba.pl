@@ -16,7 +16,7 @@ fun12([H|T]) :- fun12(_,[H|T]),!.
 fun12([_|To],[]):-!, kon(To),!.
 fun12([Ho|To],[H|T]) :- H>0, write(H), nl,!,
     fun12([Ho|To],T),!; append([Ho|To],[H],C),!, fun12(C,T).
-%13не робит
+%13робит
 permutation1(_,0,Premka,Premka).
 permutation1(A,Lenght,Perm,Premka):-
     list_find_ex(A,El,T),L1 is Lenght-1,permutation1(T,L1,[El|Perm],Premka).
@@ -155,7 +155,7 @@ not(in_list(Ch,[saharov,writer])),
 not(in_list(Ch,[voronov,writer])),
 write(Ch),!.
 %19 name, race, place, sport
-fun19 :- Chto =(_,_,_),
+fun19 :- Chto =[_,_,_],
 in_list(Chto,[mike,_,_,basket]),
 in_list(Chto,[rich,_,_,_]),
 in_list(Chto,[simon,israel,_,_]),
@@ -170,3 +170,20 @@ not(in_list(Chto,[mike,amerika,_,_])),
 in_list(Chto,[W1,austral,_,_]),
 in_list(Chto,[rich,_,C1,_]),
 write('Austral is'), writeln(W1), write('Rich is'), writeln(C1).
+%20 Andrey, Dmit,Boris,Vik,Grig or ne1,ne2,ne3,ne4,ne5
+fun20 :- Soch = [_,_,_],
+in_list(Soch,[And,_,_,_,_]),
+in_list(Soch,[_,Dmit,_,_,_]),
+in_list(Soch,[_,_,Boris,_,_]),
+in_list(Soch,[_,_,_,Vik,_]),
+in_list(Soch,[_,_,_,_,Grig]),
+in_list(Soch,[no,_,_,_,_]),
+in_list(Soch,[_,no,_,_,_]),
+in_list(Soch,[_,_,no,_,_]),
+in_list(Soch,[_,_,_,no,_]),
+in_list(Soch,[_,_,_,_,no]),
+not(in_list(Soch,[And,Dmit,Boris,_,_])),
+not(in_list(Soch,[And,no,Boris,Vik,_])),
+in_list(Soch,[_,Dmit,no,no,_]),
+in_list(Soch,[_,no,no,Vik,Grig]),
+write(Soch).
