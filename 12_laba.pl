@@ -22,19 +22,31 @@ u(A,C,I) :- 0 is I mod 2, nod(A,I),!, I1 is I+1,
     u(A,C1,I1), C is C1+1.
 u(A,C,I) :- I1 is I+1, u(A,C,I1).
 u(A,W) :- u(A,W,1).
-%12 не сделано
+%12
+mindi(_,_,0):-!.
+mindi(A,A,I):- A>4, A is I*I,!.
+mindi(A,Div,I):- 0 is A mod I,!,
+    Div is I, mindi(A,Div,0).
+mindi(A,Div,I):- I1 is I +1, mindi(A,Div,I1).
+mindi(1,1):-!.
+mindi(0,_):- !,fail.
+mindi(A,Div):- mindi(A,Div,2).
 common(A, B, L):-
     nod(A, B,G),
     L is (A*B)/G.
+sum(0,0):-!.
+sum(A,Sum):-(A mod 10) < 5,!,
+    A1 is A div 10,S is (A mod 10), sum(A1,Sum1),Sum is Sum1+S.
+sum(A,Sum):- A1 is A div 10,sum(A1,Sum).
 l(0,0):- !.
 l(A,B) :- A1 is A div 10, l(A1,B1), B is B1 +1.
 f(_,_,_,1):-!,fail.
-f(A,X,Div,I):- nod(A,I),not(0 is (I mod Div)),!,
+f(A,X,Div,I):- not(nod(A,I,1)),not(0 is (I mod Div)),!,
     X is I.
 f(A,X,Div,I):- I1 is I - 1, f(A,X,Div,I1).
-f(A,X):- common(A,X,_),
-    I is A -1,f(A,X1,X,I),
-    l(A,Y),X is X1 * Y.
+f(A,X):- mindi(A,Div),I is A -1,
+    f(A,X1,Div,I),
+    sum(A,Y),X is X1 * Y.
 %13
 fun13(0,XX,_,XX):-!.
 fun13(N,X,L,XX):- N1 is N-1,l(N1,L1),L1 is L,!,
@@ -85,6 +97,23 @@ fun15([H|T],[H|Tn],M,Qm):-H is M,!,
 fun15([H|T],[H|Tn],M,Qm):-fun15(T,Tn,M,Qm).
 fun15(List,NewList):-list_min(List,M),list_find(List,M,Qm),fun15(List,NewList,M,Qm).
 %16
+fun16([],[],[],[],_,_,_,_):-!.
+
+fun16([H|T],[H|Tn],L2,L3,Max,Min,Fx,Fn):-H is Min,!,
+    Fn0 is Fn - 1,fun16(T,Tn,L2,L3,Max,Min,Fx,Fn0).
+fun16([H|T],[H|Tn],L2,L3,Max,Min,Fx,Fn):-Fn is 1,!,
+    fun16(T,Tn,L2,L3,Max,Min,Fx,Fn).
+
+fun16([H|T],L1,L2,[H|Tn],Max,Min,Fx,Fn):-H is Max,!,
+    Fx0 is Fx - 1,fun16(T,L1,L2,Tn,Max,Min,Fx0,Fn).
+fun16([H|T],L1,L2,[H|Tn],Max,Min,Fx,Fn):-Fx is 0,!,
+    fun16(T,L1,L2,Tn,Max,Min,Fx,Fn).
+
+fun16([H|T],L1,[H|Tn],L3,Max,Min,Fx,Fn):-Fx is 1,Fn is 0,
+    fun16(T,L1,Tn,L3,Max,Min,Fx,Fn).
+
+fun16(List,NewList):-
+    list_min(List,Min),list_max(List,Max),fun16(List,List1,List2,List3,Max,Min,1,1),list_rev(List2,ListR),concat1(List1,ListR,NewList1),concat1(NewList1,List3,NewList).
 %17
 fun17([],M1,M2) :-!, write(M1),nl, write(M2),!.
 fun17([H|T]) :- fun17(T,H).
